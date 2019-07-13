@@ -27,7 +27,8 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      <div> { courses}
+      <div> 
+      {/* { courses} */}
       </div>
     </div>
   );
