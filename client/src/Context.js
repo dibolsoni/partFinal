@@ -31,7 +31,7 @@ export class Provider extends Component {
         signIn: this.signIn,
         signOut: this.signOut,
         genCourseList: this.genCourseList,
-        genCourseDetail: this.genCourseDetail
+        genCourseDetail: this.genCourseDetail,
       }
     };
 
@@ -85,6 +85,7 @@ export class Provider extends Component {
     }
     return course;
   }
+
 
 }
 

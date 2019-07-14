@@ -20,7 +20,8 @@ export default class Data {
       const encodedCredentials = btoa(`${credentials.username}:${credentials.password}`);
       options.headers['Authorization'] = `Basic ${encodedCredentials}`;
     }
-    return fetch(url, options)           
+    return fetch(url, options)
+                     
   }
 
   // USER
@@ -43,8 +44,15 @@ export default class Data {
       return [];
     }
     else if (response.status === 400) {
+      // console.log('data', response.json().then(data => data))
       return response.json().then(data => {
-        return data.errors;
+        if (data.code) {
+          const result = Array(data.message)
+          return result;
+        } else {
+          return data.errors
+        }
+
       });
     }
     else {
@@ -79,6 +87,21 @@ export default class Data {
       });
     } else {
       throw new Error("Can't got course");
+    }
+  }
+
+  async createCourse(course) {
+    const response = await this.api('/courses', 'POST', course, true, course.User);
+    if (response.status === 201) {
+      return response.location;
+    }
+    else if (response.status === 400) {
+       return response.json().then(data => {
+        return data.errors;
+      });
+    }
+    else {
+      throw new Error();
     }
   }
 }

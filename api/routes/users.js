@@ -70,10 +70,11 @@ router.post('/',
           if (err.name === 'SequelizeUniqueConstraintError') {
             err.status = 400;
             err.message = 'Email already exists'
-            return next(err);
+            next(err);
           } else {
-            err.status = 400;
-            return next(err);
+            console.log(err.errors[0].message)
+            err.status = 400;            
+            next(err);
           };
         });
 });

@@ -5,14 +5,20 @@ import withContext from '../Context';
 const HeaderWithContext = withContext(CoursesList);
 
 export default class Courses extends React.PureComponent {
+
+  
   getCourses = async () => {
     const { context } = this.props;
     const courses = await context.actions.genCourseList();
     this.setState({courses: courses});
   }
 
-  async componentDidMount () {
+  componentDidMount() {
     this.getCourses();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.props.context.courses);
   }
 
   render() {
