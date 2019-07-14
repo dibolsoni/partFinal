@@ -23,6 +23,7 @@ export default class Data {
     return fetch(url, options)           
   }
 
+  // USER
   async getUser(username, password) {
     const response = await this.api(`/users`, 'GET', null, true, { username, password });
     if (response.status === 200) {
@@ -51,15 +52,33 @@ export default class Data {
     }
   }
 
+  // COURSES
   async getCourses() {
     const response = await this.api(`/courses`, 'GET', null);
     if (response.status === 200) {
       return response.json().then(data => data.courses);
-    } else if (response.status === 400) {
-      return null;
+    } else if (response.status === 500) {
+      return response.json().then(data => {
+        return data.errors;
+      });
     } else {
       throw new Error("Can't got courses");
     }
   }
 
+  async getCourse(id){
+    if (!id) {
+      throw new Error("No course sent");
+    }
+    const response = await this.api(`/courses/${id}`, 'GET', null);
+    if (response.status === 200) {
+      return response.json().then(data => data.courses);
+    } else if (response.status === 500) {
+      return response.json().then(data => {
+        return data.errors;
+      });
+    } else {
+      throw new Error("Can't got course");
+    }
+  }
 }

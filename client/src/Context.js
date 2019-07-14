@@ -14,21 +14,24 @@ export class Provider extends Component {
   state = {
     authenticatedUser: Cookies.getJSON('authenticatedUser') || null,
     isAuthenticated: false,
-    courses: []
+    courses: [],
+    course: null
   };
 
   render() {
     // const  courses = this.genCourseList;
-    const { authenticatedUser, isAuthenticated, courses } = this.state;
+    const { authenticatedUser, isAuthenticated, courses, course } = this.state;
     const value = {
       authenticatedUser,
       isAuthenticated,
       courses,
+      course,
       data: this.data,
       actions: { 
         signIn: this.signIn,
         signOut: this.signOut,
-        genCourseList: this.genCourseList
+        genCourseList: this.genCourseList,
+        genCourseDetail: this.genCourseDetail
       }
     };
 
@@ -72,6 +75,17 @@ export class Provider extends Component {
     }
     return courses;
   }
+
+  genCourseDetail = async (id) => {
+    const course = await this.data.getCourse(id);
+    if (course !== null) {
+      this.setState({
+        course: course
+      });
+    }
+    return course;
+  }
+
 }
 
 
