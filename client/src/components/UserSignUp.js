@@ -134,7 +134,6 @@ export default class UserSignUp extends Component {
     //create user from data obj passed in context
     context.data.createUser(user)
       .then(errors => {
-          console.log('signuP', errors.message);
         if (errors.length) {
           this.setState({ errors });
         } else {
