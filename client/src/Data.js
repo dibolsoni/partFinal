@@ -22,7 +22,7 @@ export default class Data {
       options.headers['Authorization'] = `Basic ${encodedCredentials}`;
     }
     return fetch(url, options)
-            
+           
   }
 
   // USER
@@ -84,9 +84,9 @@ export default class Data {
     } else if (response.status === 500) {
       return response.json().then(data => {
         return data.errors;
-      });
-    } else {
-      throw new Error("Can't got course");
+      }
+    )} else if (response.status === 404) {
+      throw new Error('Course not found',404);
     }
   }
 
@@ -101,7 +101,7 @@ export default class Data {
       });
     }
     else {
-      throw new Error();
+      throw new Error('Course not created',500);
     }
   }
 
@@ -121,7 +121,27 @@ export default class Data {
       });
     }
     else {
-      throw new Error();
+      throw new Error('Course not updated',500);
+    }
+  }
+
+  async deleteCourse(id, user) {
+    const response = await this.api(`/courses/${id}`, 'DELETE', null, true, user)
+    if (response.status === 204) {
+      return null;
+    }
+    else if (response.status >= 400) {
+       return response.json().then(data => {
+        if (data.code) {
+          const result = Array(data.message)
+          return result;
+        } else {
+          return data.errors
+        }
+      });
+    }
+    else {
+      throw new Error('Course not deleted',500);
     }
   }
 }

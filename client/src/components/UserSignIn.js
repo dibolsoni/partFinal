@@ -31,6 +31,7 @@ export default class UserSignIn extends Component {
                   id="username" 
                   name="username" 
                   type="text"
+                  autoComplete="username"
                   value={username} 
                   onChange={this.change} 
                   placeholder="User Name" />
@@ -38,6 +39,7 @@ export default class UserSignIn extends Component {
                   id="password" 
                   name="password"
                   type="password"
+                  autoComplete="current-password"
                   value={password} 
                   onChange={this.change} 
                   placeholder="Password" />                
