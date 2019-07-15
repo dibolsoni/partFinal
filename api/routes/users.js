@@ -9,7 +9,6 @@ const bcryptjs = require('bcryptjs');
 
 
 // const Op = Sequelize.Op;
-const Course = require('../models').Course;
 const User = require('../models').User;
 
 
@@ -21,7 +20,8 @@ router.get('/', authenticateUser, (req, res, next) => {
   res.json({
     id: user.id,
     name: `${user.firstName} ${user.lastName}`,
-    username: user.emailAddress
+    username: user.emailAddress,
+    password: user.password
   })
   res.end();
 });
