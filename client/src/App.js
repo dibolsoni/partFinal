@@ -14,6 +14,8 @@ import CourseUpdate from './components/CourseUpdate'
 import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp'
 import UserSignOut from './components/UserSignOut';
+import NotFound from './components/NotFound';
+import Authenticated from './components/Authenticated';
 
 //protected routes
 import PrivateRoute from './PrivateRoute';
@@ -27,7 +29,7 @@ const CourseUpdateWithContext = withContext(CourseUpdate);
 const UserSignInWithContext = withContext(UserSignIn);
 const UserSignUpWithContext = withContext(UserSignUp);
 const UserSignOutWithContext = withContext(UserSignOut);
-
+const AuthenticatedWithContext = withContext(Authenticated);
 
 
 export default() => (
@@ -36,13 +38,16 @@ export default() => (
       <HeaderWithContext />
 
       <Switch>
-        <Route exact path="/" component={CoursesWithContext} /> 
-        <Route path="/course-detail/:id" component={CourseDetailWithContext} /> 
+        <Route exact path="/" component={CoursesWithContext} />
         <Route path="/signin" component={UserSignInWithContext} />
         <Route path="/signup" component={UserSignUpWithContext} />
-        <Route path="/signout" component={UserSignOutWithContext} />
-        <PrivateRoute path="/create-course" component={CourseCreateWithContext} />
-        <PrivateRoute path="/update/:id" component={CourseUpdateWithContext} />
+        <Route path="/signout" component={UserSignOutWithContext} /> 
+        <Route exact path="/authenticated" component={AuthenticatedWithContext} /> 
+        <PrivateRoute exact path="/courses/create/" component={CourseCreateWithContext} />
+        <PrivateRoute exact path="/courses/:id/update/" component={CourseUpdateWithContext} />
+        <Route exact path="/courses/:id" component={CourseDetailWithContext} /> 
+
+        <Route component={NotFound} /> 
         
       </Switch>
     </div>

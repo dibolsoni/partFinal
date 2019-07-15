@@ -63,6 +63,7 @@ export default class UserSignUp extends Component {
                         id="emailAddress" 
                         name="emailAddress" 
                         type="text"
+                        autoComplete="username"
                         value={emailAddress} 
                         onChange={this.change} 
                         placeholder="Email Address" />
@@ -72,6 +73,7 @@ export default class UserSignUp extends Component {
                         id="password" 
                         name="password"
                         type="password"
+                        autoComplete="new-password"
                         value={password} 
                         onChange={this.change} 
                         placeholder="Password" />
@@ -80,7 +82,8 @@ export default class UserSignUp extends Component {
                     <input 
                         id="confirmPassword" 
                         name="confirmPassword"
-                        type="confirmPassword"
+                        type="password"
+                        autoComplete="new-password"
                         value={confirmPassword} 
                         onChange={this.change} 
                         placeholder="Confirm Password" />

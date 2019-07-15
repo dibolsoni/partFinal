@@ -3,10 +3,39 @@ import {Link} from 'react-router-dom';
 
 
 export default class CourseDetail extends React.PureComponent {
-
+    deleteCourse = (e,id) => {
+        e.preventDefault();
+        const {context} = this.props;
+        const user = context.authenticatedUser;
+        if (!user) {
+            return false;
+        }
+        console.log('state user', user)
+        context.data.deleteCourse(id,user)
+        .then(errors => {
+            if (errors.length) {
+              this.setState({ errors });
+            } else {
+                    this.props.history.push('/');    
+            };
+            }
+          )
+          .catch( err => {
+            // handle rejected promises
+            console.log(err);
+            //Render an "Error" Route
+            // this.props.history.push('/error'); //push to history stack
+          });
+        this.props.history.push('/')
+    }
+    
     getCourse = async (id) => {
         const { context } = this.props;
-        const course = await context.actions.genCourseDetail(id);
+        const course = await context.actions.genCourseDetail(id)
+                                .catch(err => {
+                                        console.log(err.status)
+                                        this.props.history.push('/notfound')
+                                });
         this.setState({course: course});
       }
 
@@ -14,12 +43,17 @@ export default class CourseDetail extends React.PureComponent {
         const { id } = this.props.match.params;
         this.getCourse(id);
     }
+
+    componentWillUnmount() {
+        clearInterval(this.props.context);
+        
+    }
     render() {
         const { context } = this.props;
         const { course } = context;
         let result;
         if (!course) {
-            return 'loading...'
+            return '...'
         } else {
             let materialsNeeded;
             const description = course.description
@@ -69,16 +103,23 @@ export default class CourseDetail extends React.PureComponent {
             )
 
         }
+        const {User} = course;
+        const {authenticatedUser} = context;
+        let owner;
+        if (authenticatedUser) {
+            owner = User.id === authenticatedUser.id 
+        }
         const actions_bar =  (
             <div className="actions--bar">
                 <div className="bounds">
                     <div className="grid-100">
-                        <span>
-                            {course.User.id === context.authenticatedUser.id ? 
-                                <Link to={`../update/${course.id}`} className="button">Update Course</Link> 
-                            : 
-                                <Link to={`../update/${course.id}`} className="button" onClick={e => e.preventDefault()} style={{backgroundColor:'#808080'}}>Update Course</Link>}                            
-                            <Link to={`../delete/${course.id}`} className="button">Delete Course</Link>
+                        <span >
+                            { authenticatedUser && owner ? 
+                        <Link to={`${course.id}/update/`} className="button">Update Course </Link> : null }
+                            {authenticatedUser && owner ? 
+                        <button className="button"
+                            onClick={e => owner? this.deleteCourse(e, course.id) : e.preventDefault()}
+                        >Delete Course </button> : null}
                         </span>
                         <Link to='/' className="button button-secondary">Return to List</Link>
                     </div>
@@ -92,4 +133,6 @@ export default class CourseDetail extends React.PureComponent {
             </div>
         )
     }
+    
+
 }
