@@ -6,7 +6,7 @@ const HeaderWithContext = withContext(CoursesList);
 
 export default class Courses extends React.PureComponent {
 
-  
+
   getCourses = async () => {
     const { context } = this.props;
     const courses = await context.actions.genCourseList();
@@ -22,14 +22,7 @@ export default class Courses extends React.PureComponent {
   }
 
   render() {
-
-
-
-    
-
-
     return (
-
         <div className="bounds">
           <div className="grid-100">
             <HeaderWithContext />

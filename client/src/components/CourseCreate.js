@@ -7,7 +7,7 @@ export default class CourseCreate extends Component {
     description: '',
     estimatedTime: '',
     materialsNeeded: '',
-    userId: null,
+    User: this.props.context.authenticatedUser,
     errors: [],
   }
 
@@ -18,18 +18,13 @@ export default class CourseCreate extends Component {
       estimatedTime,
       materialsNeeded,
       errors,
+      User
     } = this.state;
 
     return (
       <div className="bounds course--detail">
           <h1>Create Course</h1>
         <div>
-                <h2 className="validation--errors--label">Validation Errors</h2>
-                <div className="validation-errors">
-                    <ul>
-                        <li>Please provide a value for "Title"</li>
-                    </ul>
-                </div>
           <Form 
             cancel={this.cancel}
             errors={errors}
@@ -50,6 +45,7 @@ export default class CourseCreate extends Component {
                                 onChange={this.change} 
                                 placeholder="Course title..." />
                             </div>
+                            <p>by {User.name}</p>
                         </div>
                         <div className="course--description">
                             <div>
@@ -68,14 +64,14 @@ export default class CourseCreate extends Component {
                                 <li className="course--stats--list--item">
                                     <h4>Estimated Time</h4>
                                     <div>
-                                        <input className="course--time--input"
-                                            id="estimatedTime" 
-                                            name="estimatedTime"
-                                            type="text"
-                                            value={estimatedTime} 
-                                            onChange={this.change} 
-                                            placeholder="Hours..." />
-                                        </div>
+                                      <input className="course--time--input"
+                                          id="estimatedTime" 
+                                          name="estimatedTime"
+                                          type="text"
+                                          value={estimatedTime} 
+                                          onChange={this.change} 
+                                          placeholder="Hours..." />
+                                    </div>
                                 </li>
                                 <li className="course--stats--list--item">
                                     <h4>Materials Needed</h4>
@@ -118,10 +114,8 @@ export default class CourseCreate extends Component {
         description,
         estimatedTime,
         materialsNeeded,
-        errors,
+        User
       } = this.state;
-    
-    const User = context.authenticatedUser;
 
     //user
     const course = {
@@ -129,25 +123,27 @@ export default class CourseCreate extends Component {
         description,
         estimatedTime,
         materialsNeeded,
-        errors,
-        User
+        userId: User.id
     };
-    console.log(course)
 
-    context.data.createCourse(course)
-      .then(location => {
-        if (location) {
-            console.log('location:', location)
-            // this.props.history.push(location)
+    const user = User;
+    user.password = User.password
+
+
+    context.data.createCourse(course, user)
+      .then(errors => {
+        if (errors.length) {
+          this.setState({ errors });
         } else {
-            console.log(location)
+              this.props.history.push('/');    
+        };
         }
-      })
+      )
       .catch( err => {
         // handle rejected promises
         console.log(err);
         //Render an "Error" Route
-        this.props.history.push('/error'); //push to history stack
+        // this.props.history.push('/error'); //push to history stack
       });
 
   }
