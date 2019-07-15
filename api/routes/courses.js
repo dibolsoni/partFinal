@@ -20,11 +20,17 @@ router.get('/', (req, res, next) => {
       order: [["title", "ASC"]]
     })
     .then(function(courses){
+      if (courses) {
         res.status(200).json({courses: courses, user: user})
-      }).catch(function(err){
-          err.status = 500;
-          next(err);
-      });
+      } else {
+        const err = new Error('No courses found')
+        err.status = 404;
+        throw err;
+      }
+    }).catch(function(err){
+        err.status = 500;
+        next(err);
+    });
 })
 
 router.get('/:id',  (req, res, next) => {
@@ -38,9 +44,14 @@ router.get('/:id',  (req, res, next) => {
     where: [{id: course_id }]
   })
     .then(function(courses){
-      res.status(200).json({courses: courses, user: req.body.currentUser})
+      if (courses) {
+        res.status(200).json({courses: courses, user: req.body.currentUser})
+      } else {
+        const err = new Error('No course found')
+        err.status = 404;
+        throw err;
+      }
     }).catch(function(err){
-        err.status = 500;
         next(err);
     });
 })
@@ -74,19 +85,29 @@ router.post('/', authenticateUser,
     // Get the course from the request body.
     Course.create(course)
         .then((new_course) => {
-          res.status(201).location(`/api/courses/${new_course.id}`).end()
-        }).catch(function(err){
-          if (err.name === 'SequelizeUniqueConstraintError') {
-            err.status = 400;
-            err.message = 'Email already exists'
-            return next(err);
+          if (new_course) {
+            res
+            .status(201)
+            .location(`/api/courses/${new_course.id}`)
+            .end()
           } else {
-            err.status = 400;
-            return next(err);
-          };
-        });
-});
+            throw new Error('Error creating a new course')
+          }
 
+        })
+        .catch(function(err){
+            console.log(err)
+            if (err.name === 'SequelizeUniqueConstraintError') {
+              err.status = 400;
+              err.message = 'Email already exists'
+              next(err);
+            } else {
+                console.log(err)
+                next(err);
+            }
+        });
+
+});
 router.put('/:id',  authenticateUser, 
   [
     check('title')

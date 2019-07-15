@@ -6,6 +6,23 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models').User;
 
 
+const isAuth = (credentials = null, password) => {
+  if ( isNaN( bcryptjs.getRounds(credentials) )){
+    if (bcryptjs.compareSync(credentials, password)) {
+      return true;
+    } else { 
+      return false;
+    };
+  } else {
+    if (credentials== password) {
+      return true;
+    } else { 
+      return false;
+    };
+  }
+}
+
+
   /**
    * Middleware to authenticate the request using Basic Authentication.
    * @param {Request} req - The Express Request object.
@@ -18,7 +35,7 @@ const User = require('../models').User;
       console.log('Authenticating user...');
       // Get the user's credentials from the Authorization header.
       const credentials = auth(req);
-
+      
     
       if (credentials) {
         // Look for a user whose `username` matches the credentials `name` property.
@@ -30,17 +47,18 @@ const User = require('../models').User;
         })
           .then(user => {
             if (user) {
-              const authenticated = bcryptjs
-                .compareSync(credentials.pass, user.password);
+              const authenticated = isAuth(credentials.pass, user.password)
               if (authenticated) {
                 // Cleaning the password to store the user on the Request object.
-                user.password = 'nowApassword';
                 req.body.currentUser = user;
                 console.log(`Authentication successful for username: ${user.firstName}`);
                 next();
   
               } else {
                 message = `Authentication failure for username: ${user.firstName}`;
+                const err = new Error('password does not match', 401)
+                next(err);
+                
               }
             } else {
               message = `User not found for username: ${credentials.name}`;
