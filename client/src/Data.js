@@ -21,8 +21,8 @@ export default class Data {
       const encodedCredentials = btoa(`${username}:${password}`);
       options.headers['Authorization'] = `Basic ${encodedCredentials}`;
     }
-
-    return fetch(url, options)                     
+    return fetch(url, options)
+            
   }
 
   // USER
@@ -106,13 +106,18 @@ export default class Data {
   }
 
   async updateCourse(course, user) {
-    const response = await this.api('/courses', 'PUT', course, true, user)
-    if (response.status === 201) {
+    const response = await this.api(`/courses/${course.id}`, 'PUT', course, true, user)
+    if (response.status === 204) {
       return course;
     }
-    else if (response.status === 400) {
+    else if (response.status >= 400) {
        return response.json().then(data => {
-        return data.errors;
+        if (data.code) {
+          const result = Array(data.message)
+          return result;
+        } else {
+          return data.errors
+        }
       });
     }
     else {

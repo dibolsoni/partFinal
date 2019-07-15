@@ -15,7 +15,8 @@ export default class CourseDetail extends React.PureComponent {
         this.getCourse(id);
     }
     render() {
-        const { course } = this.props.context;
+        const { context } = this.props;
+        const { course } = context;
         let result;
         if (!course) {
             return 'loading...'
@@ -73,7 +74,10 @@ export default class CourseDetail extends React.PureComponent {
                 <div className="bounds">
                     <div className="grid-100">
                         <span>
-                            <Link to={`../update/${course.id}`} className="button">Update Course</Link>
+                            {course.User.id === context.authenticatedUser.id ? 
+                                <Link to={`../update/${course.id}`} className="button">Update Course</Link> 
+                            : 
+                                <Link to={`../update/${course.id}`} className="button" onClick={e => e.preventDefault()} style={{backgroundColor:'#808080'}}>Update Course</Link>}                            
                             <Link to={`../delete/${course.id}`} className="button">Delete Course</Link>
                         </span>
                         <Link to='/' className="button button-secondary">Return to List</Link>

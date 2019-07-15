@@ -20,6 +20,7 @@ getCourse = async (id) => {
         description: course.description,
         estimatedTime: course.estimatedTime,
         materialsNeeded: course.materialsNeeded,
+        owner: `${course.User.firstName} ${course.User.lastName}`
         });
 
 }
@@ -33,13 +34,18 @@ componentDidMount() {
 }
 
   render() {
+    // let course= {user: null}
+    // if (this.props.context) {
+    //     course.user = this.props.context.course.firstName;
+    // }
+
     let {
       title,
       description,
       estimatedTime,
       materialsNeeded,
       errors,
-      User,
+      owner,
     } = this.state;
 
 
@@ -47,7 +53,7 @@ componentDidMount() {
 
     return (
       <div className="bounds course--detail">
-          <h1>Create Course</h1>
+          <h1>Update Course</h1>
         <div>
           <Form 
             cancel={this.cancel}
@@ -69,7 +75,7 @@ componentDidMount() {
                                 onChange={this.change} 
                                 placeholder="Course title..." />
                             </div>
-                            <p>by {User.name}</p>
+                            <p>by  {owner}</p>
                         </div>
                         <div className="course--description">
                             <div>
@@ -143,6 +149,7 @@ componentDidMount() {
 
     //user
     const course = {
+        id: context.course.id,
         title,
         description,
         estimatedTime,
@@ -154,10 +161,10 @@ componentDidMount() {
     user.password = User.password
 
 
-    context.data.createCourse(course, user)
+    context.data.updateCourse(course, user)
       .then(errors => {
         if (errors.length) {
-          this.setState({ errors });
+          this.setState({ errors: errors });
         } else {
               this.props.history.push('/');    
         };
