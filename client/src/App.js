@@ -9,9 +9,10 @@ import {
 import Header from './components/Header';
 import Courses from './components/Courses';
 import CourseDetail from './components/CourseDetail';
+import CourseCreate from './components/CourseCreate'
+import CourseUpdate from './components/CourseUpdate'
 import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp'
-import CourseCreate from './components/CourseCreate'
 import UserSignOut from './components/UserSignOut';
 
 //protected routes
@@ -21,9 +22,10 @@ import withContext from './Context';
 const HeaderWithContext = withContext(Header);
 const CoursesWithContext = withContext(Courses);
 const CourseDetailWithContext = withContext(CourseDetail);
+const CourseCreateWithContext = withContext(CourseCreate);
+const CourseUpdateWithContext = withContext(CourseUpdate);
 const UserSignInWithContext = withContext(UserSignIn);
 const UserSignUpWithContext = withContext(UserSignUp);
-const CourseCreateWithContext = withContext(CourseCreate);
 const UserSignOutWithContext = withContext(UserSignOut);
 
 
@@ -40,6 +42,7 @@ export default() => (
         <Route path="/signup" component={UserSignUpWithContext} />
         <Route path="/signout" component={UserSignOutWithContext} />
         <PrivateRoute path="/create-course" component={CourseCreateWithContext} />
+        <PrivateRoute path="/update/:id" component={CourseUpdateWithContext} />
         
       </Switch>
     </div>

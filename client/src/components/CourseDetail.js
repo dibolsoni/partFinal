@@ -73,8 +73,8 @@ export default class CourseDetail extends React.PureComponent {
                 <div className="bounds">
                     <div className="grid-100">
                         <span>
-                            <Link to='./update.html' className="button">Update Course</Link>
-                            <Link to='./delete.html' className="button">Delete Course</Link>
+                            <Link to={`../update/${course.id}`} className="button">Update Course</Link>
+                            <Link to={`../delete/${course.id}`} className="button">Delete Course</Link>
                         </span>
                         <Link to='/' className="button button-secondary">Return to List</Link>
                     </div>

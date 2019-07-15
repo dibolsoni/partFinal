@@ -104,4 +104,19 @@ export default class Data {
       throw new Error();
     }
   }
+
+  async updateCourse(course, user) {
+    const response = await this.api('/courses', 'PUT', course, true, user)
+    if (response.status === 201) {
+      return course;
+    }
+    else if (response.status === 400) {
+       return response.json().then(data => {
+        return data.errors;
+      });
+    }
+    else {
+      throw new Error();
+    }
+  }
 }
