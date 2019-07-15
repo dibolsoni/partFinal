@@ -134,6 +134,7 @@ router.put('/:id',  authenticateUser,
     const course_updated = req.body;
     Course.findOne({where: [{id: course_id }], include: [{model:User}]})
       .then((course) => {
+        console.log('inside sequeleize-> coourse', course.userId, 'user: ', user.id);
         if (course) {
           if (course.userId === user.id) {
             course.update(course_updated);
