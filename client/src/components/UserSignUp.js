@@ -20,6 +20,7 @@ export default class UserSignUp extends Component {
   }
 
   render() {
+    
     const {
       firstName,
       lastName,
@@ -111,6 +112,7 @@ export default class UserSignUp extends Component {
 
   submit = () => {
     const { context } = this.props;
+    const { location } = this.props;
 
     const {
       firstName,
@@ -142,7 +144,10 @@ export default class UserSignUp extends Component {
         } else {
           context.actions.signIn(emailAddress, password)
             .then(() => {
-              this.props.history.push('/authenticated');    
+              location.from ? 
+                this.props.history.push(location.from) 
+              : 
+                this.props.history.push('/authenticated');    
             });
         }
       })
