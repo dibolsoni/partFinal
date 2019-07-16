@@ -14,8 +14,10 @@ import CourseUpdate from './components/CourseUpdate'
 import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp'
 import UserSignOut from './components/UserSignOut';
-import NotFound from './components/NotFound';
 import Authenticated from './components/Authenticated';
+import NotFound from './components/NotFound';
+import Forbidden from './components/Forbidden';
+
 
 //protected routes
 import PrivateRoute from './PrivateRoute';
@@ -43,6 +45,7 @@ export default() => (
         <Route path="/signup" component={UserSignUpWithContext} />
         <Route path="/signout" component={UserSignOutWithContext} /> 
         <Route exact path="/authenticated" component={AuthenticatedWithContext} /> 
+        <Route exact path="/forbidden" component={Forbidden} /> 
         <PrivateRoute exact path="/courses/create/" component={CourseCreateWithContext} />
         <PrivateRoute exact path="/courses/:id/update/" component={CourseUpdateWithContext} />
         <Route exact path="/courses/:id" component={CourseDetailWithContext} /> 
