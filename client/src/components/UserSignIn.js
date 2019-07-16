@@ -66,23 +66,21 @@ export default class UserSignIn extends Component {
 
   submit = () => {
     const { context } = this.props;
-    const { from } = this.props.location || '/authenticated' ;
+    const { from } = this.props.location  ;
     const { username, password } = this.state;
     context.actions.signIn(username, password)
       .then( user => {
-        console.log('user:', user)
         if (user === null) {
           this.setState(() => {
             return { errors: ['Sign-in was unsuccessful'] };
           });
         }
          else {
-          this.props.history.push(from);
-          console.log(`SUCCESS! ${username} is now signed in!`);
+          this.props.history.push(from || '/authenticated');
+          console.log(`SUCCESS! ${username} is now signed in! ... redirecting to -> ${from}`);
         }  
       })
       .catch( err => {
-        console.log(err);
         this.props.history.push('/error');
       })
   };

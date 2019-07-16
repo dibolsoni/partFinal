@@ -17,7 +17,7 @@ import UserSignOut from './components/UserSignOut';
 import Authenticated from './components/Authenticated';
 import NotFound from './components/NotFound';
 import Forbidden from './components/Forbidden';
-
+import error from './components/error';
 
 //protected routes
 import PrivateRoute from './PrivateRoute';
@@ -45,7 +45,8 @@ export default() => (
         <Route path="/signup" component={UserSignUpWithContext} />
         <Route path="/signout" component={UserSignOutWithContext} /> 
         <Route exact path="/authenticated" component={AuthenticatedWithContext} /> 
-        <Route exact path="/forbidden" component={Forbidden} /> 
+        <Route exact path="/forbidden" component={Forbidden} />
+        <Route exact path="/error" component={error} />  
         <PrivateRoute exact path="/courses/create/" component={CourseCreateWithContext} />
         <PrivateRoute exact path="/courses/:id/update/" component={CourseUpdateWithContext} />
         <Route exact path="/courses/:id" component={CourseDetailWithContext} /> 
