@@ -9,7 +9,7 @@ A user administration courses in school.
 @ 3 - install db ->npm run seed in /api folder <br />
 @ 4 - start project -> npm start in two folders api/ and client/ <br />
 
-###USAGE
+### USAGE
 <ul>
   <li>Create a user</li>
   <li>Create a course</li>
@@ -17,7 +17,7 @@ A user administration courses in school.
   <li>Create a user</li>
 </ul>
 
-###TECHNOLOGIES
+### TECHNOLOGIES
 <ul>
   <li>React</li>
   <li>Rest API</li>
