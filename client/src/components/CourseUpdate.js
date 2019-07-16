@@ -3,6 +3,7 @@ import Form from './Form';
 
 export default class CourseUpdate extends Component {
   state = {
+    id: null,
     title: '',
     description: '',
     estimatedTime: '',
@@ -14,8 +15,13 @@ export default class CourseUpdate extends Component {
 
 getCourse = async (id) => {
     const { context } = this.props;
-    const course = await context.actions.genCourseDetail(id);
+    const course = await context.data.getCourse(id)
+                          .catch(err=> {
+                            this.props.history.push('error')
+                            return {errors: err};
+                          });
     this.setState({
+        id: course.id,
         title: course.title,
         description: course.description,
         estimatedTime: course.estimatedTime,
@@ -140,6 +146,7 @@ componentDidMount() {
     const { context } = this.props;
 
     const {
+        id,
         title,
         description,
         estimatedTime,
@@ -149,7 +156,7 @@ componentDidMount() {
 
     //user
     const course = {
-        id: context.course.id,
+        id,
         title,
         description,
         estimatedTime,
@@ -174,7 +181,7 @@ componentDidMount() {
         // handle rejected promises
         console.log(err);
         //Render an "Error" Route
-        // this.props.history.push('/error'); //push to history stack
+        this.props.history.push('/error'); //push to history stack
       });
 
   }

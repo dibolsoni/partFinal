@@ -14,24 +14,19 @@ export class Provider extends Component {
   state = {
     authenticatedUser: Cookies.getJSON('authenticatedUser') || null,
     isAuthenticated: false,
-    courses: [],
-    course: null,
   };
+
 
   render() {
     // const  courses = this.genCourseList;
-    const { authenticatedUser, isAuthenticated, courses, course } = this.state;
+    const { authenticatedUser, isAuthenticated } = this.state;
     const value = {
       authenticatedUser,
       isAuthenticated,
-      courses,
-      course,
       data: this.data,
       actions: { 
         signIn: this.signIn,
         signOut: this.signOut,
-        genCourseList: this.genCourseList,
-        genCourseDetail: this.genCourseDetail,
       }
     };
 
@@ -43,8 +38,15 @@ export class Provider extends Component {
   }
 
   // USERS
+  /**
+   * Authenticate user
+   * register authenticated user in state
+   * set cookies
+   * @param username as emailAddress 
+   * @param password unhashed to validates
+   */
   signIn = async (username, password) => {
-    const user = await this.data.getUser(username, password);
+    const user = await this.data.getUser(username, password)
     if (user !== null) {
       this.setState(() => {
         return {
@@ -57,35 +59,19 @@ export class Provider extends Component {
     return user;
   }
 
+  /**
+   * Unloads user from app
+   * remove cookies
+   */
   signOut = () => {
-    this.setState({ 
+     this.setState({ 
       authenticatedUser: null,
-      isAuthenticated: false,
-      pw: null
+      isAuthenticated: false
     });
     Cookies.remove('authenticatedUser');
   }
 
-  // COURSES
-  genCourseList = async () => {
-    const courses = await this.data.getCourses();
-    if (courses !== null) {
-      this.setState({
-        courses: courses
-      });
-    }
-    return courses;
-  }
-
-  genCourseDetail = async (id) => {
-    const course = await this.data.getCourse(id);
-    if (course !== null) {
-      this.setState({
-        course: course
-      });
-    }
-    return course;
-  }
+  
 
 
 }

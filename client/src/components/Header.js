@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 export default class Header extends React.PureComponent {
   render() {
     const { context } = this.props;
-    const { location } = this.props; 
-    console.log(location);
     const authUser = context.authenticatedUser;
     return (
       <div className="header">
