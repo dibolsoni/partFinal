@@ -1,6 +1,6 @@
 # partFinal - Treehouse Full Stack JavaScript Techdegree 
 ## Full Stack App with React and a REST API
-A user administration for course in school.
+A user administration courses in school.
 
 <h3>INSTALL</h3>
 <b>Steps:</b> <br />
