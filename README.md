@@ -24,9 +24,3 @@ A user administration courses in school.
   <li>Javascript</li>
   <li>CSS</li>
 </ul>
-
-
-  
--
--
--
