@@ -2,15 +2,15 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 
-export default class Forbidden extends React.Component {
+export default class error extends React.Component {
 
     render(){
 
         const {from} = this.props.location;
         return(
                 <div className="bounds">
-                    <h1>Forbidden</h1>
-                    <p> Oh oh! You can't access this page.</p>
+                    <h1>Internal Error</h1>
+                    <p> Sorry! We just encountered an unexpected error.</p>
                     <h2>
                         <p>
                             <Link to={
