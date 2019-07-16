@@ -14,7 +14,6 @@ A user administration courses in school.
   <li>Create a user</li>
   <li>Create a course</li>
   <li>Only the owner of the course can delete and update it</li>
-  <li>Create a user</li>
 </ul>
 
 ### TECHNOLOGIES
