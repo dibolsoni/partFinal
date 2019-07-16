@@ -68,7 +68,8 @@ export default class UserSignIn extends Component {
     const { context } = this.props;
     const { from } = this.props.location  ;
     const { username, password } = this.state;
-    context.actions.signIn(username, password)
+    if (username && password) {
+      context.actions.signIn(username, password)
       .then( user => {
         if (user === null) {
           this.setState(() => {
@@ -77,12 +78,16 @@ export default class UserSignIn extends Component {
         }
          else {
           this.props.history.push(from || '/authenticated');
-          console.log(`SUCCESS! ${username} is now signed in! ... redirecting to -> ${from}`);
+          console.log(`SUCCESS! ${username} is now signed in!`);
         }  
       })
       .catch( err => {
         this.props.history.push('/error');
       })
+    } else {
+    this.setState({errors: ['Please type a username and password']})
+    }
+
   };
 
   cancel = () => {

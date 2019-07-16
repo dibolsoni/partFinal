@@ -3,10 +3,12 @@ import {Link} from 'react-router-dom';
 
 
 export default class CoursesList extends React.PureComponent {
+
+
   render() {
-    const { courses } = this.props.context;
+    const {courses} = this.props;
     let result;
-    if (courses.length > 1) {
+    if (courses && courses.length > 1) {
       result = courses.map((course) => {
         return (
                 <div className="grid-33" key={course.id}>
@@ -22,7 +24,7 @@ export default class CoursesList extends React.PureComponent {
     } else {
       return (
         <div>
-          no courses found!
+          ...
         </div>          
       )
     }
@@ -42,8 +44,8 @@ export default class CoursesList extends React.PureComponent {
     );
     return (
       <div>
-      {result}
-      {add}      
+        {result}
+        {add}      
       </div>
     )
  }

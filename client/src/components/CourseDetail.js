@@ -1,42 +1,41 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
+const ReactMarkdown = require('react-markdown/with-html')
+
+
 
 export default class CourseDetail extends React.PureComponent {
+    state = {
+        course: null
+    }
+
     deleteCourse = (e,id) => {
         e.preventDefault();
         const {context} = this.props;
         const user = context.authenticatedUser;
         if (!user) {
-            return false;
+            this.setState({errors: ['You must be logged to delete a course']})
         }
-        console.log('state user', user)
         context.data.deleteCourse(id,user)
-        .then(errors => {
-            if (errors.length) {
-              this.setState({ errors });
-            } else {
-                    this.props.history.push('/');    
-            };
-            }
-          )
-          .catch( err => {
-            // handle rejected promises
-            console.log(err);
-            //Render an "Error" Route
-            // this.props.history.push('/error'); //push to history stack
-          });
+            .then(this.setState({location:true}))
+            .catch(err => {this.props.history.push('/error')})
         this.props.history.push('/')
     }
     
     getCourse = async (id) => {
         const { context } = this.props;
-        const course = await context.actions.genCourseDetail(id)
-                                .catch(err => {
-                                        console.log(err.status)
-                                        this.props.history.push('/notfound')
-                                });
-        this.setState({course: course});
+        const course = await context.data.getCourse(id)
+        .catch(err => {
+                console.log(err.status)
+                this.props.history.push('/notfound')
+        });
+
+        this.setState({
+            course:course,
+            loading: false
+        })
+
       }
 
     componentDidMount() {
@@ -44,31 +43,21 @@ export default class CourseDetail extends React.PureComponent {
         this.getCourse(id);
     }
 
-    componentWillUnmount() {
-        clearInterval(this.props.context);
-        
-    }
     render() {
         const { context } = this.props;
-        const { course } = context;
+        const  course  = this.state.course;
         let result;
         if (!course) {
             return '...'
         } else {
             let materialsNeeded;
-            const description = course.description
-                                    .split('\n\n')
-                                    .map((item, index) => {
-                                        return <p key={index}>{item}</p>
-                                    });
             if (course.materialsNeeded) {
                 materialsNeeded = course.materialsNeeded
                     .split('*')
                     .filter(item => item)
-                    .map((item, index) => (
-                        <li key={index}>{item}</li>
-                    )
-                );
+                    .reduce((acc, item) => {
+                         return acc +=  `\n- ${item}\n`;
+                    }, '');
             } 
             result = (
                 <div className="bounds course--detail">
@@ -79,7 +68,10 @@ export default class CourseDetail extends React.PureComponent {
                             <p>By {course.User.firstName} {course.User.lastName}</p>
                         </div>
                         <div className="course--description">
-                            {description}
+                            <ReactMarkdown
+                                source={course.description}
+                                escapeHtml={false}
+                                />
                         </div>
                     </div>
                     <div className="grid-25 grid-right">
@@ -92,9 +84,15 @@ export default class CourseDetail extends React.PureComponent {
                             </li>
                             <li className="course--stats--list--item">
                                 <h4>Materials Needed</h4>
-                                <ul>
-                                    {materialsNeeded ? materialsNeeded : 'No materials estimated'}
-                                </ul>
+                                {course.materialsNeeded ?
+                                    <ReactMarkdown
+                                        source={materialsNeeded}
+                                        escapeHtml={false}
+                                        list={true}
+                                    />
+                                : 
+                                    'No materials estimated'
+                                }
                             </li>
                             </ul>
                         </div>
@@ -129,7 +127,13 @@ export default class CourseDetail extends React.PureComponent {
         return(
             <div>
                 {actions_bar}
-                {result}
+                {
+                    !this.state.loading ?
+                        result
+                    :
+                        '...'
+                }
+
             </div>
         )
     }

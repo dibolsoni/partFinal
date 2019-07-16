@@ -7,6 +7,7 @@ export default class error extends React.Component {
     render(){
 
         const {from} = this.props.location;
+
         return(
                 <div className="bounds">
                     <h1>Internal Error</h1>
