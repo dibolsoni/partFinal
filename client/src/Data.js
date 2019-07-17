@@ -122,9 +122,11 @@ export default class Data {
     } else if (response.status === 500) {
       return response.json().then(data => {
         return data.errors;
-      }
-    )} else if (response.status === 404) {
+      })
+    } else if (response.status === 404) {
       throw new Error('Course not found',404);
+    } else if (response.status === 401) {
+      throw new Error('You are not the owner of this course',404);
     }
   }
 
@@ -188,7 +190,6 @@ export default class Data {
     }
     else if (response.status >= 400) {
        return response.json().then(data => {
-         console.log('data', data)
         if (data.code) {
           const result = Array(data.message)
           return result;

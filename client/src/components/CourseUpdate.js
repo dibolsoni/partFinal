@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import Form from './Form';
+import {Redirect} from 'react-router-dom';
+
 
 export default class CourseUpdate extends Component {
+    _isMounted = false;
+
+
   state = {
-    id: null,
+    id: '',
     title: '',
     description: '',
     estimatedTime: '',
@@ -15,35 +20,46 @@ export default class CourseUpdate extends Component {
 
 getCourse = async (id) => {
     const { context } = this.props;
-    const course = await context.data.getCourse(id)
+    await context.data.getCourse(id)
+                          .then(course=>{
+                            if (this._isMounted) {
+                              this.setState({
+                                id: course.id,
+                                title: course.title,
+                                description: course.description,
+                                estimatedTime: course.estimatedTime,
+                                materialsNeeded: course.materialsNeeded,
+                                owner: `${course.User.firstName} ${course.User.lastName}`,
+                                ownerId: course.User.id,
+                                isOwner: course.User.id === context.authenticatedUser.id
+                                });
+                            }                         
+                          })
                           .catch(err=> {
                             this.props.history.push('error')
                             return {errors: err};
                           });
-    this.setState({
-        id: course.id,
-        title: course.title,
-        description: course.description,
-        estimatedTime: course.estimatedTime,
-        materialsNeeded: course.materialsNeeded,
-        owner: `${course.User.firstName} ${course.User.lastName}`
-        });
 
+    
 }
+
 
 
 componentDidMount() {
-    const { id } = this.props.match.params;
-    this.getCourse(id);
+  this._isMounted = true;
 
+  const { id } = this.props.match.params;
+  this.getCourse(id);
+    
+}
 
+componentWillUnmount() {
+  this._isMounted = false;
 }
 
   render() {
-    // let course= {user: null}
-    // if (this.props.context) {
-    //     course.user = this.props.context.course.firstName;
-    // }
+    const { isOwner } = this.state;
+    console.log('owe', isOwner)
 
     let {
       title,
@@ -55,13 +71,16 @@ componentDidMount() {
     } = this.state;
 
 
-    
+
 
     return (
-      <div className="bounds course--detail">
+      !isOwner && this._isMounted? 
+        <Redirect to="/forbidden" />
+      :
+        <div className="bounds course--detail">
           <h1>Update Course</h1>
         <div>
-          <Form 
+          {<Form 
             cancel={this.cancel}
             errors={errors}
             submit={this.submit}
@@ -125,7 +144,7 @@ componentDidMount() {
                     </div>
                 </React.Fragment>
                 
-            )} />
+          )} />}
         </div>
       </div>
     );
@@ -187,6 +206,7 @@ componentDidMount() {
   }
 
   cancel = () => {
-    this.props.history.push('/');
+    const {id} = this.state;
+    this.props.history.push(`/courses/${id}`);
   }
 }
