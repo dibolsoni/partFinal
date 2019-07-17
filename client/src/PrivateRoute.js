@@ -3,13 +3,18 @@ import { Route, Redirect } from 'react-router-dom';
 import { Consumer } from './Context';
 
 export default ({ component: Component, ...rest }) => {
+
   return (
     <Consumer>
-      { context => (
+      { (context) => {
+        return (
         <Route
           {...rest}
           render={
-            props => 
+
+            props => {
+              return (
+
               context.authenticatedUser ? 
                 <Component {...props} />
               : 
@@ -17,9 +22,11 @@ export default ({ component: Component, ...rest }) => {
                   pathname: '/forbidden',
                   from: props.location,
                 }} />
+              )
+            }
           }
-      />
-      )}
+        />
+      )}}
     </Consumer>
   );
 };
