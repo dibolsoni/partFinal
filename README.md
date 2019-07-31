@@ -1,4 +1,4 @@
-# partFinal - Treehouse Full Stack JavaScript Techdegree 
+# Treehouse Full Stack JavaScript Techdegree - last unit
 ## Full Stack App with React and a REST API
 A user administration courses in school.
 
