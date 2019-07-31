@@ -18,7 +18,15 @@ A user administration courses in school.
 
 ### TECHNOLOGIES
 <ul>
-  <li>React</li>
-  <li>Rest API</li>
+  <li>Rest API'</li>
+  <li>Express</li>
+  <li>Sqlite</li>
   <li>Javascript</li>
+  <li>React</li>
+  <li>React Router</li>
+  <li>React Markdown</li>
+  <li>JS Cookie</li>
+  <li>Javascript</li>
+  <li>CSS</li>
+  <li>HTML</li>
 </ul>
