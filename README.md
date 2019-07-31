@@ -21,5 +21,4 @@ A user administration courses in school.
   <li>React</li>
   <li>Rest API</li>
   <li>Javascript</li>
-  <li>CSS</li>
 </ul>
